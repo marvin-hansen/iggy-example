@@ -8,4 +8,8 @@ repository.workspace = true
 authors.workspace = true
 
 [dependencies]
+# Internal crates
+message_shared = {workspace = true}
+
+# Internal crates
 iggy = {workspace = true}
