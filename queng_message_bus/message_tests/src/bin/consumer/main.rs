@@ -1,11 +1,11 @@
-use std::error::Error;
 use iggy::clients::consumer::ReceivedMessage;
+use std::error::Error;
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn Error>> {
     let consumer_name = "test-message-consumer";
     let config = message_shared::get_ims_data_config();
-    let message_handler =message_handler;
+    let message_handler = message_handler;
 
     // build consumer
     let mut _consumer =
