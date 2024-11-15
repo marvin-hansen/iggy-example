@@ -8,11 +8,16 @@ repository.workspace = true
 authors.workspace = true
 license.workspace = true
 
-[lib]
-path = "src/fake_lib.rs"
+[[bin]]
+name = "consumer"
+path = "src/bin/consumer/main.rs"
+
+[[bin]]
+name = "producer"
+path = "src/bin/producer/main.rs"
 
 # For testing
-[dev-dependencies]
+[dependencies]
 # Internal crates
 message_producer = { workspace = true }
 message_consumer = { workspace = true }
@@ -21,3 +26,4 @@ message_shared = {workspace = true}
 
 # External crates
 iggy = { workspace = true }
+tokio = { workspace = true }
