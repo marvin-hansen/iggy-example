@@ -25,22 +25,27 @@ impl MessageProducer {
 
 impl MessageProducer {
     async fn build(args: Args) -> Result<Self, IggyError> {
+        // Build client provider configuration
         let client_provider_config = Arc::new(
             ClientProviderConfig::from_args(args.to_sdk_args())
                 .expect("Failed to create client provider config"),
         );
 
+        // Build client_provider
         let client = client_provider::get_raw_client(client_provider_config, false)
             .await
             .expect("Failed to create client");
 
+        // Build client
         let client = IggyClient::builder()
             .with_client(client)
             .build()
             .expect("Failed to create client");
 
+        // Connect client
         client.connect().await.expect("Failed to connect");
 
+        // Create producer
         let mut producer = client
             .producer(&args.stream_id, &args.topic_id)
             .expect("Failed to create producer")
@@ -49,6 +54,7 @@ impl MessageProducer {
             .partitioning(Partitioning::balanced())
             .build();
 
+        // Init producer
         producer.init().await.expect("Failed to init producer");
 
         Ok(MessageProducer { producer })
