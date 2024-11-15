@@ -51,7 +51,13 @@ pub struct Args {
 }
 
 impl Args {
-    pub fn new(username: String, password: String, stream_id: String, topic_id: String, tcp_server_address: String,) -> Self {
+    pub fn new(
+        username: String,
+        password: String,
+        stream_id: String,
+        topic_id: String,
+        tcp_server_address: String,
+    ) -> Self {
         Self {
             username,
             password,

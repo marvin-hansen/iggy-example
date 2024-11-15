@@ -41,7 +41,14 @@ impl MessageProducer {
         topic_id: String,
         tcp_server_address: String,
     ) -> Result<Self, IggyError> {
-        Self::build(Args::new(username, password, stream_id, topic_id, tcp_server_address)).await
+        Self::build(Args::new(
+            username,
+            password,
+            stream_id,
+            topic_id,
+            tcp_server_address,
+        ))
+        .await
     }
 
     /// Creates a new `MessageProducer` instance using the provided `ImsDataConfig`.
