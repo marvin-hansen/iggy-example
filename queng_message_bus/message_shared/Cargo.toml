@@ -9,4 +9,5 @@ authors.workspace = true
 license.workspace = true
 
 [dependencies]
+common_message_bus = {workspace = true}
 iggy = {workspace = true}

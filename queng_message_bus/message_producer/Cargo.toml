@@ -10,6 +10,7 @@ license.workspace = true
 
 [dependencies]
 # Internal crates
+common_message_bus = {workspace = true}
 message_shared = {workspace = true}
 
 # Internal crates

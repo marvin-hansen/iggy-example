@@ -1,3 +1,4 @@
+use common_message_bus::prelude::ImsDataConfig;
 use iggy::users::defaults::{DEFAULT_ROOT_PASSWORD, DEFAULT_ROOT_USERNAME};
 use iggy::utils::duration::IggyDuration;
 use std::str::FromStr;
@@ -47,6 +48,28 @@ pub struct Args {
     pub quic_max_idle_timeout: u64,
     pub quic_validate_certificate: bool,
     pub quic_heartbeat_interval: String,
+}
+
+impl Args {
+    pub fn new(username: String, password: String, stream_id: String, topic_id: String) -> Self {
+        Self {
+            username,
+            password,
+            stream_id,
+            topic_id,
+            ..Default::default()
+        }
+    }
+
+    pub fn from_ims_data_config(config: &ImsDataConfig) -> Self {
+        Self {
+            username: config.stream_user().to_string(),
+            password: config.stream_password().to_string(),
+            stream_id: config.stream_id().to_string(),
+            topic_id: config.topic_ids().to_string(),
+            ..Default::default()
+        }
+    }
 }
 
 impl Default for Args {

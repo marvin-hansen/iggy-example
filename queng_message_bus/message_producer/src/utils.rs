@@ -7,7 +7,7 @@ use iggy::identifier::Identifier;
 use iggy::models::permissions::{Permissions, StreamPermissions};
 use iggy::models::user_status::UserStatus;
 
-async fn create_stream_and_user(
+pub(crate) async fn create_stream_and_user(
     stream_name: &str,
     username: &str,
     userpassword: &str,

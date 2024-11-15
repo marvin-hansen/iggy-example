@@ -1,6 +1,7 @@
 mod send;
 mod utils;
 
+use common_message_bus::prelude::ImsDataConfig;
 use iggy::client::Client;
 use iggy::client_provider;
 use iggy::client_provider::ClientProviderConfig;
@@ -18,6 +19,19 @@ pub struct MessageProducer {
 }
 
 impl MessageProducer {
+    pub async fn new(
+        username: String,
+        password: String,
+        stream_id: String,
+        topic_id: String,
+    ) -> Result<Self, IggyError> {
+        Self::build(Args::new(username, password, stream_id, topic_id)).await
+    }
+
+    pub async fn from_config(config: &ImsDataConfig) -> Result<Self, IggyError> {
+        Self::build(Args::from_ims_data_config(config)).await
+    }
+
     pub async fn default() -> Result<Self, IggyError> {
         Self::build(Args::default()).await
     }
@@ -53,6 +67,11 @@ impl MessageProducer {
             .send_interval(IggyDuration::from_str(&args.interval).expect("Invalid interval format"))
             .partitioning(Partitioning::balanced())
             .build();
+
+        // Create stream and user
+        utils::create_stream_and_user(&args.stream_id, &args.username, &args.password, &client)
+            .await
+            .expect("Failed to create stream and user");
 
         // Init producer
         producer.init().await.expect("Failed to init producer");
