@@ -2,18 +2,15 @@ mod consume;
 
 use common_message_bus::prelude::ImsDataConfig;
 use iggy::client::Client;
-use iggy::client_provider;
-use iggy::client_provider::ClientProviderConfig;
-use iggy::clients::client::IggyClient;
 use iggy::clients::consumer::{AutoCommit, AutoCommitWhen, IggyConsumer, ReceivedMessage};
 use iggy::consumer::ConsumerKind;
 use iggy::error::IggyError;
 use iggy::messages::poll_messages::PollingStrategy;
 use iggy::utils::duration::IggyDuration;
+use message_shared::utils as shared_utils;
 use message_shared::Args;
 use std::error::Error;
 use std::str::FromStr;
-use std::sync::Arc;
 
 pub struct MessageConsumer {
     consumer: IggyConsumer,
@@ -53,7 +50,6 @@ impl MessageConsumer {
         )
         .await
     }
-
 
     /// Creates a new `MessageConsumer` instance using the provided `ImsDataConfig`.
     ///
@@ -104,21 +100,9 @@ impl MessageConsumer {
         consumer_name: &str,
         message_handler: fn(&ReceivedMessage) -> Result<(), Box<dyn Error>>,
     ) -> Result<Self, IggyError> {
-        // Build client provider configuration
-        let client_provider_config = Arc::new(
-            ClientProviderConfig::from_args(args.to_sdk_args())
-                .expect("Failed to create client provider config"),
-        );
-
-        // Build client_provider
-        let client = client_provider::get_raw_client(client_provider_config, false)
-            .await
-            .expect("Failed to create client");
-
         // Build client
-        let client = IggyClient::builder()
-            .with_client(client)
-            .build()
+        let client = shared_utils::build_client(&args)
+            .await
             .expect("Failed to create client");
 
         // Connect client

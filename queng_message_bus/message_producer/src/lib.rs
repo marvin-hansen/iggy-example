@@ -1,18 +1,14 @@
 mod produce;
-mod utils;
 
 use common_message_bus::prelude::ImsDataConfig;
 use iggy::client::Client;
-use iggy::client_provider;
-use iggy::client_provider::ClientProviderConfig;
-use iggy::clients::client::IggyClient;
 use iggy::clients::producer::IggyProducer;
 use iggy::error::IggyError;
 use iggy::messages::send_messages::Partitioning;
 use iggy::utils::duration::IggyDuration;
+use message_shared::utils as shared_utils;
 use message_shared::Args;
 use std::str::FromStr;
-use std::sync::Arc;
 
 pub struct MessageProducer {
     producer: IggyProducer,
@@ -78,21 +74,9 @@ impl MessageProducer {
 
 impl MessageProducer {
     async fn build(args: Args) -> Result<Self, IggyError> {
-        // Build client provider configuration
-        let client_provider_config = Arc::new(
-            ClientProviderConfig::from_args(args.to_sdk_args())
-                .expect("Failed to create client provider config"),
-        );
-
-        // Build client_provider
-        let client = client_provider::get_raw_client(client_provider_config, false)
-            .await
-            .expect("Failed to create client");
-
         // Build client
-        let client = IggyClient::builder()
-            .with_client(client)
-            .build()
+        let client = shared_utils::build_client(&args)
+            .await
             .expect("Failed to create client");
 
         // Connect client
@@ -108,9 +92,14 @@ impl MessageProducer {
             .build();
 
         // Create stream and user
-        utils::create_stream_and_user(&args.stream_id, &args.username, &args.password, &client)
-            .await
-            .expect("Failed to create stream and user");
+        shared_utils::create_stream_and_user(
+            &args.stream_id,
+            &args.username,
+            &args.password,
+            &client,
+        )
+        .await
+        .expect("Failed to create stream and user");
 
         // Init producer
         producer.init().await.expect("Failed to init producer");

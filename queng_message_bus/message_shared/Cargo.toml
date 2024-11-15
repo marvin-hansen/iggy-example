@@ -9,5 +9,8 @@ authors.workspace = true
 license.workspace = true
 
 [dependencies]
+# Internal crates
 common_message_bus = {workspace = true}
+# External crates
+ahash = {workspace = true}
 iggy = {workspace = true}
