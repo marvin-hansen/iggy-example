@@ -5,6 +5,16 @@ use iggy::users::defaults::{DEFAULT_ROOT_PASSWORD, DEFAULT_ROOT_USERNAME};
 use iggy::utils::duration::IggyDuration;
 use std::str::FromStr;
 
+pub fn get_ims_data_config() -> ImsDataConfig {
+    ImsDataConfig::new(
+        DEFAULT_ROOT_USERNAME.to_string(),
+        DEFAULT_ROOT_PASSWORD.to_string(),
+        "example-stream".to_string(),
+        "example-topic".to_string(),
+        "127.0.0.1:8090".to_string(),
+    )
+}
+
 #[derive(Debug)]
 pub struct Args {
     pub message_batches_limit: u64,
