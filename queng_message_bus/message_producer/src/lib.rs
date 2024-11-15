@@ -115,7 +115,7 @@ impl MessageProducer {
         // Init producer
         producer.init().await.expect("Failed to init producer");
 
-        Ok(MessageProducer { producer })
+        Ok(Self { producer })
     }
 }
 
