@@ -6,20 +6,37 @@ pub struct ImsDataConfig {
     stream_password: String,
     stream_id: String,
     topic_ids: String,
+    tcp_server_address: String,
 }
 
 impl ImsDataConfig {
+    /// Creates a new `ImsDataConfig` instance.
+    ///
+    /// # Arguments
+    ///
+    /// * `stream_user` - The username for stream authentication.
+    /// * `stream_password` - The password for stream authentication.
+    /// * `stream_id` - The identifier of the stream.
+    /// * `topic_ids` - The identifiers of the topics.
+    /// * `tcp_server_address` - The tcp server address i.e. "127.0.0.1:8090"
+    ///
+    /// # Returns
+    ///
+    /// An `ImsDataConfig` instance .
+    ///
     pub fn new(
         stream_user: String,
         stream_password: String,
         stream_id: String,
         topic_ids: String,
+        tcp_server_address: String,
     ) -> Self {
         Self {
             stream_user,
             stream_password,
             stream_id,
             topic_ids,
+            tcp_server_address,
         }
     }
 }
@@ -40,10 +57,14 @@ impl ImsDataConfig {
     pub fn stream_password(&self) -> &str {
         &self.stream_password
     }
+
+    pub fn tcp_server_address(&self) -> &str {
+        &self.tcp_server_address
+    }
 }
 
 impl Display for ImsDataConfig {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        write!(f, "ImsDataConfig {{ stream_user: {}, stream_password: {}, stream_id: {}, topic_ids: {} }}", self.stream_user, self.stream_password, self.stream_id, self.topic_ids)
+        write!(f, "{:?}", self)
     }
 }

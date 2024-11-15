@@ -51,12 +51,13 @@ pub struct Args {
 }
 
 impl Args {
-    pub fn new(username: String, password: String, stream_id: String, topic_id: String) -> Self {
+    pub fn new(username: String, password: String, stream_id: String, topic_id: String, tcp_server_address: String,) -> Self {
         Self {
             username,
             password,
             stream_id,
             topic_id,
+            tcp_server_address,
             ..Default::default()
         }
     }
@@ -67,6 +68,7 @@ impl Args {
             password: config.stream_password().to_string(),
             stream_id: config.stream_id().to_string(),
             topic_id: config.topic_ids().to_string(),
+            tcp_server_address: config.tcp_server_address().to_string(),
             ..Default::default()
         }
     }
