@@ -4,7 +4,7 @@ members = [
     "queng_common/common_message_bus",
     "queng_message_bus/message_consumer",
     "queng_message_bus/message_producer",
-    "queng_message_bus/message_shared",
+    "queng_message_bus/message_shared", "queng_message_bus/message_tests",
 ]
 
 [workspace.package]

@@ -1,0 +1,22 @@
+[package]
+name = "message_tests"
+version = "0.1.0"
+edition.workspace = true
+rust-version.workspace = true
+readme.workspace = true
+repository.workspace = true
+authors.workspace = true
+license.workspace = true
+license-file.workspace = true
+
+[lib]
+path = "src/fake_lib.rs"
+
+# For testing
+[dev-dependencies]
+# Internal crates
+message_producer = { workspace = true }
+message_consumer = { workspace = true }
+message_shared = { workspace = true }
+# External crates
+iggy = { workspace = true }
