@@ -9,7 +9,11 @@ authors.workspace = true
 
 [dependencies]
 # Internal crates
+common_message_bus = {workspace = true}
 message_shared = {workspace = true}
 
-# Internal crates
+# External crates
 iggy = {workspace = true}
+tokio = {workspace = true}
+anyhow ={workspace = true}
+bytes = { workspace = true }

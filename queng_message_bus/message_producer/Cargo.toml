@@ -13,7 +13,7 @@ license.workspace = true
 common_message_bus = {workspace = true}
 message_shared = {workspace = true}
 
-# Internal crates
+# External crates
 ahash = {workspace = true}
 iggy = {workspace = true}
 tokio = {workspace = true}

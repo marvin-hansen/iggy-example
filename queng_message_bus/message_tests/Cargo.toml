@@ -16,6 +16,8 @@ path = "src/fake_lib.rs"
 # Internal crates
 message_producer = { workspace = true }
 message_consumer = { workspace = true }
-message_shared = { workspace = true }
+common_message_bus = {workspace = true}
+message_shared = {workspace = true}
+
 # External crates
 iggy = { workspace = true }
