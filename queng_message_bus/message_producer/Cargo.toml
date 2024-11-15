@@ -14,3 +14,6 @@ message_shared = {workspace = true}
 
 # Internal crates
 iggy = {workspace = true}
+tokio = {workspace = true}
+anyhow ={workspace = true}
+bytes = { workspace = true }
