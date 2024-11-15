@@ -1,0 +1,57 @@
+[workspace]
+resolver = "2"
+members = [
+    "queng_common/common_message_bus",
+    "queng_message_bus/message_consumer",
+    "queng_message_bus/message_producer",
+    "queng_message_bus/message_shared",
+]
+
+[workspace.package]
+edition = "2021"
+rust-version = "1.82.0"
+readme = "README.md"
+repository = "https://github.com/marvin-hansen/quant-engine"
+authors = ["Marvin Hansen <marvin.hansen@gmail.com>"]
+license = "MIT"
+license-file = "LICENSE"
+
+# Optimize all crates
+[profile.release]
+opt-level = 3
+strip = true  # Automatically strip debug symbols from the binary
+lto = true    # Enable Link Time Optimization (LTO)
+codegen-units = 1 # Reduce Parallel Code Generation Units to Increase Optimization
+
+
+# There's a Cargo feature named profile-overrides
+# that lets you override the optimization level of dependencies.
+# https://docs.rust-embedded.org/book/unsorted/speed-vs-size.html
+[profile.release.package."*"]
+opt-level = 3
+strip = 'debuginfo'  # Automatically strip debug infos from the binary to reduce size
+codegen-units = 1 # Reduce Parallel Code Generation Units to Increase Optimization
+
+
+[workspace.dependencies]
+#
+# ==============
+# Internal Aliases
+# ==============
+#
+
+# Common
+common_message_bus = { path = "queng_common/common_message_bus" }
+
+# Mesasge bus
+message_consumer = { path = "queng_message_bus/message_consumer" }
+message_producer = { path = "queng_message_bus/message_producer" }
+message_shared = { path = "queng_message_bus/message_shared" }
+
+#
+# ==============
+# External crates
+# ==============
+#
+iggy = "0.6.34"
+
