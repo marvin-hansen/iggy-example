@@ -3,7 +3,6 @@ use ahash::AHashMap;
 use iggy::client::{StreamClient, UserClient};
 use iggy::clients::client::IggyClient;
 use iggy::error::IggyError;
-use iggy::identifier::Identifier;
 use iggy::models::permissions::{Permissions, StreamPermissions};
 use iggy::models::user_status::UserStatus;
 
@@ -40,27 +39,5 @@ pub(crate) async fn create_stream_and_user(
         .await
         .expect("Failed to create user");
 
-    Ok(())
-}
-
-async fn ensure_stream_access(
-    client: &IggyClient,
-    available_stream: &str,
-    unavailable_streams: &[&str],
-) -> Result<(), IggyError> {
-    client
-        .get_stream(&available_stream.try_into()?)
-        .await?
-        .unwrap_or_else(|| panic!("No access to stream: {available_stream}"));
-    for stream in unavailable_streams {
-        if client
-            .get_stream(&Identifier::named(stream)?)
-            .await?
-            .is_none()
-        {
-        } else {
-            panic!("Access to stream: {stream} should not be allowed");
-        }
-    }
     Ok(())
 }
