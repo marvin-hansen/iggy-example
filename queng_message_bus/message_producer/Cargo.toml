@@ -6,6 +6,7 @@ rust-version.workspace = true
 readme.workspace = true
 repository.workspace = true
 authors.workspace = true
+license.workspace = true
 
 [dependencies]
 # Internal crates

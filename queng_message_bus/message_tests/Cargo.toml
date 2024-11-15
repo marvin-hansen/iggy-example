@@ -7,7 +7,6 @@ readme.workspace = true
 repository.workspace = true
 authors.workspace = true
 license.workspace = true
-license-file.workspace = true
 
 [lib]
 path = "src/fake_lib.rs"
