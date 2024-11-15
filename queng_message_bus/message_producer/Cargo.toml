@@ -13,6 +13,7 @@ license.workspace = true
 message_shared = {workspace = true}
 
 # Internal crates
+ahash = {workspace = true}
 iggy = {workspace = true}
 tokio = {workspace = true}
 anyhow ={workspace = true}
