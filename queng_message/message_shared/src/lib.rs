@@ -9,8 +9,8 @@ use iggy::utils::duration::IggyDuration;
 use std::str::FromStr;
 
 // Re export
-pub use error::SendMessageError;
-pub use traits::SendMessage;
+pub use error::*;
+pub use traits::*;
 
 pub fn get_ims_data_config() -> common_message::ImsDataConfig {
     common_message::ImsDataConfig::new(
