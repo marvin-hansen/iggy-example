@@ -1,12 +1,12 @@
 pub mod utils;
 
-use common_message_bus::prelude::ImsDataConfig;
+use common_message;
 use iggy::users::defaults::{DEFAULT_ROOT_PASSWORD, DEFAULT_ROOT_USERNAME};
 use iggy::utils::duration::IggyDuration;
 use std::str::FromStr;
 
-pub fn get_ims_data_config() -> ImsDataConfig {
-    ImsDataConfig::new(
+pub fn get_ims_data_config() -> common_message::ImsDataConfig {
+    common_message::ImsDataConfig::new(
         DEFAULT_ROOT_USERNAME.to_string(),
         DEFAULT_ROOT_PASSWORD.to_string(),
         "example-stream".to_string(),
@@ -80,7 +80,7 @@ impl Args {
         }
     }
 
-    pub fn from_ims_data_config(config: &ImsDataConfig) -> Self {
+    pub fn from_ims_data_config(config: &common_message::ImsDataConfig) -> Self {
         Self {
             username: config.stream_user().to_string(),
             password: config.stream_password().to_string(),

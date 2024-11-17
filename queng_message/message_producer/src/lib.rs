@@ -1,6 +1,6 @@
 mod produce;
 
-use common_message_bus::prelude::ImsDataConfig;
+use common_message;
 use iggy::client::Client;
 use iggy::clients::producer::IggyProducer;
 use iggy::error::IggyError;
@@ -57,7 +57,7 @@ impl MessageProducer {
     ///
     /// A `Result` wrapping the `MessageProducer` instance or an `IggyError`.
     ///
-    pub async fn from_config(config: &ImsDataConfig) -> Result<Self, IggyError> {
+    pub async fn from_config(config: &common_message::ImsDataConfig) -> Result<Self, IggyError> {
         Self::build(Args::from_ims_data_config(config)).await
     }
 

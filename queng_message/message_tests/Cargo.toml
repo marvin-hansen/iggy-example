@@ -21,7 +21,7 @@ path = "src/bin/producer/main.rs"
 # Internal crates
 message_producer = { workspace = true }
 message_consumer = { workspace = true }
-common_message_bus = {workspace = true}
+common_message = {workspace = true}
 message_shared = {workspace = true}
 
 # External crates

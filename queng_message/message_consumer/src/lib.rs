@@ -1,6 +1,6 @@
 mod consume;
 
-use common_message_bus::prelude::ImsDataConfig;
+use common_message;
 use iggy::client::Client;
 use iggy::clients::consumer::{AutoCommit, AutoCommitWhen, IggyConsumer, ReceivedMessage};
 use iggy::consumer::ConsumerKind;
@@ -64,7 +64,7 @@ impl MessageConsumer {
     /// A `Result` wrapping the `MessageConsumer` instance or an `IggyError`.
     ///
     pub async fn from_config(
-        config: &ImsDataConfig,
+        config: &common_message::ImsDataConfig,
         consumer_name: &str,
         message_handler: fn(&ReceivedMessage) -> Result<(), Box<dyn Error>>,
     ) -> Result<Self, IggyError> {

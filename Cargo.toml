@@ -3,10 +3,11 @@ resolver = "2"
 
 
 members = [
-    "queng_common/common_message_bus",
-    "queng_message_bus/message_consumer",
-    "queng_message_bus/message_producer",
-    "queng_message_bus/message_shared", "queng_message_bus/message_tests",
+    "queng_common/common_message",
+    "queng_message/message_consumer",
+    "queng_message/message_producer",
+    "queng_message/message_shared",
+    "queng_message/message_tests",
 ]
 
 
@@ -42,12 +43,12 @@ codegen-units = 1 # Reduce Parallel Code Generation Units to Increase Optimizati
 # ==============
 #
 # Common
-common_message_bus = { path = "queng_common/common_message_bus" }
+common_message = { path = "queng_common/common_message" }
 
 # Mesasge bus
-message_consumer = { path = "queng_message_bus/message_consumer" }
-message_producer = { path = "queng_message_bus/message_producer" }
-message_shared = { path = "queng_message_bus/message_shared" }
+message_consumer = { path = "queng_message/message_consumer" }
+message_producer = { path = "queng_message/message_producer" }
+message_shared = { path = "queng_message/message_shared" }
 
 #
 # ==============
