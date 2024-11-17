@@ -44,7 +44,7 @@ impl MessageProducer {
             topic_id,
             tcp_server_address,
         ))
-        .await
+            .await
     }
 
     /// Creates a new `MessageProducer` instance using the provided `ImsDataConfig`.
@@ -75,7 +75,7 @@ impl MessageProducer {
 impl MessageProducer {
     async fn build(args: Args) -> Result<Self, IggyError> {
         // Build client
-        let client = shared_utils::build_client(&args)
+        let client = shared_utils::build_client(args.to_sdk_args())
             .await
             .expect("Failed to create client");
 
@@ -98,8 +98,8 @@ impl MessageProducer {
             &args.password,
             &client,
         )
-        .await
-        .expect("Failed to create stream and user");
+            .await
+            .expect("Failed to create stream and user");
 
         // Init producer
         producer.init().await.expect("Failed to init producer");

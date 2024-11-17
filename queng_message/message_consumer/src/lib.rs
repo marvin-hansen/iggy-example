@@ -101,7 +101,7 @@ impl MessageConsumer {
         message_handler: fn(&ReceivedMessage) -> Result<(), Box<dyn Error>>,
     ) -> Result<Self, IggyError> {
         // Build client
-        let client = shared_utils::build_client(&args)
+        let client = shared_utils::build_client(args.to_sdk_args())
             .await
             .expect("Failed to create client");
 

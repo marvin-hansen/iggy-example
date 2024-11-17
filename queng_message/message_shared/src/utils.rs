@@ -21,10 +21,10 @@ use iggy::models::user_status::UserStatus;
 ///
 /// A `Result` wrapping the `IggyClient` instance or an `IggyError`.
 ///
-pub async fn build_client(args: &Args) -> Result<IggyClient, IggyError> {
+pub async fn build_client(args: iggy::args::Args) -> Result<IggyClient, IggyError> {
     // Build client provider configuration
     let client_provider_config = Arc::new(
-        ClientProviderConfig::from_args(args.to_sdk_args())
+        ClientProviderConfig::from_args(args)
             .expect("Failed to create client provider config"),
     );
 
