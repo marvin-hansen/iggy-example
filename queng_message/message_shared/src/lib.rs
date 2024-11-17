@@ -1,6 +1,7 @@
 pub mod utils;
 
 use common_message;
+use common_message::TcpTlsConfig;
 use iggy::users::defaults::{DEFAULT_ROOT_PASSWORD, DEFAULT_ROOT_USERNAME};
 use iggy::utils::duration::IggyDuration;
 use std::str::FromStr;
@@ -43,6 +44,7 @@ pub struct Args {
     pub tcp_server_address: String,
     pub tcp_tls_enabled: bool,
     pub tcp_tls_domain: String,
+    pub tcp_tls_ca_file: Option<String>,
     pub quic_client_address: String,
     pub quic_server_address: String,
     pub quic_server_name: String,
@@ -90,6 +92,25 @@ impl Args {
             ..Default::default()
         }
     }
+
+    pub fn from_ims_data_and_tls_config(
+        config: &common_message::ImsDataConfig,
+        tcp_tls_config: &TcpTlsConfig,
+    ) -> Self {
+        Self {
+            // General config
+            username: config.stream_user().to_string(),
+            password: config.stream_password().to_string(),
+            stream_id: config.stream_id().to_string(),
+            topic_id: config.topic_ids().to_string(),
+            // Tls config
+            tcp_server_address: config.tcp_server_address().to_string(),
+            tcp_tls_enabled: tcp_tls_config.tcp_tls_enabled(),
+            tcp_tls_domain: tcp_tls_config.tcp_tls_domain().to_string(),
+            tcp_tls_ca_file: tcp_tls_config.tcp_tls_ca_file().to_owned(),
+            ..Default::default()
+        }
+    }
 }
 
 impl Default for Args {
@@ -123,6 +144,7 @@ impl Default for Args {
             tcp_server_address: "127.0.0.1:8090".to_string(),
             tcp_tls_enabled: false,
             tcp_tls_domain: "localhost".to_string(),
+            tcp_tls_ca_file: None,
             quic_client_address: "127.0.0.1:0".to_string(),
             quic_server_address: "127.0.0.1:8080".to_string(),
             quic_server_name: "localhost".to_string(),
