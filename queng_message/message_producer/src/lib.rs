@@ -174,7 +174,6 @@ impl MessageProducer {
     /// Returns an `IggyError` if the client shutdown fails.
     ///
     pub async fn shutdown(&self) -> Result<(), IggyError> {
-
         // Connect client
         self.client.connect().await.expect("Failed to connect");
 

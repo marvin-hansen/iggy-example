@@ -69,7 +69,7 @@ pub async fn create_stream_and_user(
         stream.id,
         StreamPermissions {
             read_stream: true,
-            manage_topics: true,
+            read_topics: true,
             ..Default::default()
         },
     );
