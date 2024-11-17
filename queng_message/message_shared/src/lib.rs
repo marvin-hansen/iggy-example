@@ -1,3 +1,5 @@
+mod error;
+mod traits;
 pub mod utils;
 
 use common_message;
@@ -5,6 +7,10 @@ use common_message::TcpTlsConfig;
 use iggy::users::defaults::{DEFAULT_ROOT_PASSWORD, DEFAULT_ROOT_USERNAME};
 use iggy::utils::duration::IggyDuration;
 use std::str::FromStr;
+
+// Re export
+pub use error::SendMessageError;
+pub use traits::SendMessage;
 
 pub fn get_ims_data_config() -> common_message::ImsDataConfig {
     common_message::ImsDataConfig::new(
@@ -183,6 +189,7 @@ impl Args {
             tcp_heartbeat_interval: self.tcp_heartbeat_interval.clone(),
             tcp_tls_enabled: self.tcp_tls_enabled,
             tcp_tls_domain: self.tcp_tls_domain.clone(),
+            tcp_tls_ca_file: self.tcp_tls_ca_file.clone(),
             quic_client_address: self.quic_client_address.clone(),
             quic_server_address: self.quic_server_address.clone(),
             quic_server_name: self.quic_server_name.clone(),

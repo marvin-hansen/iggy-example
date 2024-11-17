@@ -44,7 +44,7 @@ impl MessageProducer {
             topic_id,
             tcp_server_address,
         ))
-            .await
+        .await
     }
 
     /// Creates a new `MessageProducer` instance using the provided `ImsDataConfig`.
@@ -98,8 +98,8 @@ impl MessageProducer {
             &args.password,
             &client,
         )
-            .await
-            .expect("Failed to create stream and user");
+        .await
+        .expect("Failed to create stream and user");
 
         // Init producer
         producer.init().await.expect("Failed to init producer");

@@ -1,4 +1,3 @@
-use crate::Args;
 use iggy::client_provider;
 use iggy::client_provider::ClientProviderConfig;
 use iggy::clients::client::IggyClient;
@@ -24,8 +23,7 @@ use iggy::models::user_status::UserStatus;
 pub async fn build_client(args: iggy::args::Args) -> Result<IggyClient, IggyError> {
     // Build client provider configuration
     let client_provider_config = Arc::new(
-        ClientProviderConfig::from_args(args)
-            .expect("Failed to create client provider config"),
+        ClientProviderConfig::from_args(args).expect("Failed to create client provider config"),
     );
 
     // Build client_provider
