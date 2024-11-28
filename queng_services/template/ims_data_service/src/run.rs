@@ -18,6 +18,7 @@ impl Server {
 
         tokio::select! {
                     // Wait for a signal that requests a graceful shutdown.
+                    // Then break the loop and proceed with the shutdown.
                     _ = &mut signal_future => {break;}
 
             // Otherwise process messages.
@@ -34,6 +35,7 @@ impl Server {
         }
 
         drop(consumer_guard);
+        self.shutdown().await.expect("Failed to shutdown message service");
 
         Ok(())
     }
