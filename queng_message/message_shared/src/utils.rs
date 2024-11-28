@@ -6,9 +6,16 @@ use std::sync::Arc;
 
 use ahash::AHashMap;
 
+use crate::Args;
 use iggy::client::{StreamClient, UserClient};
 use iggy::models::permissions::{Permissions, StreamPermissions};
 use iggy::models::user_status::UserStatus;
+
+pub async fn build_client(stream_id: String, topic_id: String) -> Result<IggyClient, IggyError> {
+    let args = Args::new(stream_id, topic_id);
+
+    build_client_from_args(args.to_sdk_args()).await
+}
 
 /// Builds an Iggy client using the provided `Args`.
 ///
@@ -20,7 +27,7 @@ use iggy::models::user_status::UserStatus;
 ///
 /// A `Result` wrapping the `IggyClient` instance or an `IggyError`.
 ///
-pub async fn build_client(args: iggy::args::Args) -> Result<IggyClient, IggyError> {
+pub async fn build_client_from_args(args: iggy::args::Args) -> Result<IggyClient, IggyError> {
     // Build client provider configuration
     let client_provider_config = Arc::new(
         ClientProviderConfig::from_args(args).expect("Failed to create client provider config"),

@@ -51,6 +51,7 @@ codegen-units = 1 # Reduce Parallel Code Generation Units to Increase Optimizati
 # Common
 common_config = { path = "queng_common/common_config" }
 common_errors = { path = "queng_common/common_errors" }
+common_iggy = { path = "queng_common/common_iggy" }
 common_ims = { path = "queng_common/common_ims" }
 common_message = { path = "queng_common/common_message" }
 common_service = { path = "queng_common/common_service" }

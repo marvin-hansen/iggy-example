@@ -1,19 +1,19 @@
 use crate::service::Server;
+use common_iggy::IggyConfig;
 use common_ims::IntegrationConfig;
-use common_message::StreamUser;
 use common_service::{print_utils, shutdown_utils};
 use tokio::time::Instant;
 
-mod handle;
+// mod handle;
 mod run;
 mod service;
-mod utils;
+// mod utils;
 
 pub async fn start(
     dbg: bool,
     service_name: &str,
     integration_config: IntegrationConfig,
-    stream_user: StreamUser,
+    iggy_config: IggyConfig,
 ) -> Result<(), Box<dyn std::error::Error>> {
     let dbg_print = |msg: &str| {
         if dbg {
@@ -26,11 +26,11 @@ pub async fn start(
     dbg_print("Configuring server");
     //Creates a new server
     let server = if dbg {
-        Server::with_debug(integration_config, stream_user)
+        Server::with_debug(integration_config, iggy_config)
             .await
             .expect("Failed to build new service")
     } else {
-        Server::new(integration_config, stream_user)
+        Server::new(integration_config, iggy_config)
             .await
             .expect("Failed to build new service")
     };

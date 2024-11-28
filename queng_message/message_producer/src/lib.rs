@@ -114,7 +114,7 @@ impl MessageProducer {
             client.unwrap()
         } else {
             // Build new client
-            shared_utils::build_client(args.to_sdk_args())
+            shared_utils::build_client_from_args(args.to_sdk_args())
                 .await
                 .expect("Failed to create client")
         };

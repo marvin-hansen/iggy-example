@@ -1,5 +1,5 @@
+use common_iggy::{IggyConfig, IggyUser};
 use common_ims::{ImsIntegrationType, IntegrationConfig, IntegrationMessageConfig};
-use common_message::StreamUser;
 
 pub fn ims_data_integration_config() -> IntegrationConfig {
     IntegrationConfig::new(
@@ -10,6 +10,6 @@ pub fn ims_data_integration_config() -> IntegrationConfig {
     )
 }
 
-pub fn stream_user() -> StreamUser {
-    StreamUser::new("sample-data-user", "secret")
+pub fn ims_data_iggy_config() -> IggyConfig {
+    IggyConfig::new(IggyUser::default(), "127.0.0.1:8090", 1, 1, 1, 1, true)
 }
