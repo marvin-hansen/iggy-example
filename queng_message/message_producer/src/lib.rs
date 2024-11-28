@@ -122,7 +122,7 @@ impl MessageProducer {
         dbg!("Connecting client");
         client.connect().await.expect("Failed to connect");
 
-        dbg!("Login admin user to stream");
+        dbg!("Login admin user");
         client
             .login_user(&args.username, &args.password)
             .await
@@ -137,7 +137,6 @@ impl MessageProducer {
             .partitioning(Partitioning::balanced())
             .build();
 
-        // Create stream
         dbg!("Creating stream");
         let res = client.create_stream(&args.stream_id, None).await;
         dbg!(&res);
@@ -203,7 +202,6 @@ impl MessageProducer {
             }
         }
 
-        // Init producer
         dbg!("Initializing producer");
         producer.init().await.expect("Failed to init producer");
 

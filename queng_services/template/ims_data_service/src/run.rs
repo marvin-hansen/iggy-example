@@ -1,36 +1,42 @@
 use crate::service::Server;
 use common_errors::MessageProcessingError;
-use futures_util::StreamExt;
 use std::error::Error;
 use std::future::Future;
+use tokio::pin;
 
 impl Server {
     pub async fn run(
         self,
-        signal: impl Future<Output = ()> + Send + 'static,
+        signal: impl Future<Output=()> + Send + 'static,
     ) -> Result<(), MessageProcessingError> {
         // // When call .await on a &mut _ reference, then pin the future. https://docs.rs/tokio/latest/tokio/macro.pin.html#examples
-        // let signal_future = signal;
-        // pin!(signal_future);
+        let signal_future = signal;
+        pin!(signal_future);
 
-        // Keep the write guard alive for the duration of message processing
         let mut consumer_guard = self.consumer().write().await;
         let consumer = consumer_guard.consumer_mut();
 
-        while let Some(message) = consumer.next().await {
-            if let Ok(message) = message {
-                self.handle_message(message.message)
-                    .await
-                    .expect("Failed to handle message");
-            } else if let Err(error) = message {
-                eprintln!("Error while handling message: {error}");
-                continue;
+        tokio::select! {
+                    // Wait for a signal that requests a graceful shutdown.
+
+                _ = signal_future => {
+                    self.shutdown()
+                        .await
+                        .expect("Failed to stop message service");
+                }
+
+            // Otherwise process messages.
+            while let Some(message) = consumer.next().await {
+                if let Ok(message) = message {
+                    self.handle_message(message.message)
+                        .await
+                        .expect("Failed to handle message");
+                } else if let Err(error) = message {
+                    eprintln!("Error while handling message: {error}");
+                    continue;
+                }
             }
         }
-
-        self.shutdown()
-            .await
-            .expect("Failed to stop message service");
 
         drop(consumer_guard);
 
