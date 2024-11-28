@@ -1,4 +1,4 @@
-use crate::service::Server;
+use crate::service::Service;
 use common_iggy::IggyConfig;
 use common_ims::IntegrationConfig;
 use common_service::{print_utils, shutdown_utils};
@@ -7,6 +7,7 @@ use tokio::time::Instant;
 // mod handle;
 mod run;
 mod service;
+mod shutdown;
 // mod utils;
 
 pub async fn start(
@@ -26,11 +27,11 @@ pub async fn start(
     dbg_print("Configuring server");
     //Creates a new server
     let server = if dbg {
-        Server::with_debug(integration_config, iggy_config)
+        Service::with_debug(integration_config, iggy_config)
             .await
             .expect("Failed to build new service")
     } else {
-        Server::new(integration_config, iggy_config)
+        Service::new(integration_config, iggy_config)
             .await
             .expect("Failed to build new service")
     };

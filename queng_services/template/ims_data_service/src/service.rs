@@ -1,5 +1,6 @@
 use common_iggy::IggyConfig;
 use common_ims::IntegrationConfig;
+use iggy::client::{Client, UserClient};
 use iggy::clients::client::IggyClient;
 use std::collections::HashMap;
 use std::error::Error;
@@ -7,17 +8,17 @@ use std::error::Error;
 type Guarded<T> = std::sync::Arc<tokio::sync::RwLock<T>>;
 
 /// A server that handles IMS (Integration Management Service) data processing.
-pub struct Server {
+pub struct Service {
     dbg: bool,
-    consumer: IggyClient,
-    producer: IggyClient,
+    consumer_client: IggyClient,
+    producer_client: IggyClient,
     iggy_config: IggyConfig,
     integration_config: IntegrationConfig,
     client_configs: Guarded<HashMap<u16, IggyConfig>>,
     client_producers: Guarded<HashMap<u16, IggyClient>>,
 }
 
-impl Server {
+impl Service {
     /// Creates a new IMS data service server with the specified configuration.
     ///
     /// # Arguments
@@ -67,44 +68,52 @@ impl Server {
     }
 }
 
-impl Server {
+impl Service {
     async fn build(
         dbg: bool,
         integration_config: IntegrationConfig,
         iggy_config: IggyConfig,
     ) -> Result<Self, Box<dyn Error>> {
-        if dbg {
-            println!("Configure iggy producer")
-        }
+        dbg!("Configure iggy producer");
 
         let stream_id = integration_config.control_channel();
         let topic_id = integration_config.control_channel();
 
-        if dbg {
-            println!("Construct iggy producer")
-        }
+        dbg!("Construct iggy producer");
         let producer = message_shared::utils::build_client(stream_id.clone(), topic_id.clone())
             .await
             .expect("Failed to build client");
 
-        if dbg {
-            println!("Configure iggy consumer")
-        }
+        dbg!("Connecting producer");
+        producer.connect().await.expect("Failed to connect");
 
-        if dbg {
-            println!("Construct iggy consumer")
-        }
+        dbg!("Login producer");
+        producer
+            .login_user(&iggy_config.user().username(), &iggy_config.user().password())
+            .await
+            .expect("Failed to login user");
+
+        dbg!("Construct iggy consumer");
         let consumer = message_shared::utils::build_client(stream_id.clone(), topic_id.clone())
             .await
             .expect("Failed to build client");
+
+        dbg!("Connecting consumer");
+        consumer.connect().await.expect("Failed to connect");
+
+        dbg!("Login consumer");
+        consumer
+            .login_user(&iggy_config.user().username(), &iggy_config.user().password())
+            .await
+            .expect("Failed to login user");
 
         let client_configs = std::sync::Arc::new(tokio::sync::RwLock::new(HashMap::new()));
         let client_producers = std::sync::Arc::new(tokio::sync::RwLock::new(HashMap::new()));
 
         Ok(Self {
             dbg,
-            consumer,
-            producer,
+            consumer_client: consumer,
+            producer_client: producer,
             iggy_config,
             integration_config,
             client_configs,
@@ -114,17 +123,17 @@ impl Server {
 }
 
 // Getters
-impl Server {
+impl Service {
     pub fn dbg(&self) -> bool {
         self.dbg
     }
 
     pub fn consumer(&self) -> &IggyClient {
-        &self.consumer
+        &self.consumer_client
     }
 
     pub fn producer(&self) -> &IggyClient {
-        &self.producer
+        &self.producer_client
     }
 
     pub fn iggy_config(&self) -> &IggyConfig {
@@ -144,10 +153,10 @@ impl Server {
     }
 }
 
-impl Server {
+impl Service {
     pub(crate) fn dbg_print(&self, msg: &str) {
         if self.dbg {
-            println!("[IMSData/Server]: {msg}");
+            println!("[IMSData/Service]: {msg}");
         }
     }
 }

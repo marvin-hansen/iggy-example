@@ -1,9 +1,9 @@
-use crate::service::Server;
+use crate::service::Service;
 use common_errors::MessageProcessingError;
 use std::future::Future;
 use tokio::{pin, select};
 
-impl Server {
+impl Service {
     pub async fn run(
         self,
         signal: impl Future<Output = ()> + Send + 'static,
@@ -39,8 +39,3 @@ impl Server {
     }
 }
 
-impl Server {
-    async fn shutdown(&self) -> Result<(), MessageProcessingError> {
-        Ok(())
-    }
-}
