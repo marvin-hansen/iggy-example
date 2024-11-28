@@ -6,7 +6,9 @@ rust-version.workspace = true
 readme.workspace = true
 repository.workspace = true
 authors.workspace = true
-license.workspace = true
+
+[lints]
+workspace = true
 
 [dependencies]
 # Internal crates
@@ -15,3 +17,4 @@ common_message = {workspace = true}
 ahash = {workspace = true}
 iggy = {workspace = true}
 trait-variant  = {workspace = true}
+tokio  = {workspace = true}

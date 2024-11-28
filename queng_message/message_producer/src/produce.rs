@@ -23,7 +23,7 @@ impl SendMessage for MessageProducer {
 
         // Send the message
         match self.producer.send_one(message).await {
-            Ok(_) => Ok(()),
+            Ok(()) => Ok(()),
             Err(e) => Err(SendMessageError {
                 message: e.to_string(),
             }),
@@ -44,14 +44,14 @@ impl SendMessage for MessageProducer {
 
         // Convert a byte array into a vector of messages
         let messages: Vec<Message> = bytes_batch
-            .into_iter()
+            .iter()
             // Convert the SBE bytes into a new message with auto-generated ID, payload, and no headers.
             .map(|bytes| Message::new(None, Bytes::from(bytes.to_owned()), None))
             .collect();
 
         // Send the message batch
         match self.producer.send(messages).await {
-            Ok(_) => Ok(()),
+            Ok(()) => Ok(()),
             Err(e) => Err(SendMessageError {
                 message: e.to_string(),
             }),

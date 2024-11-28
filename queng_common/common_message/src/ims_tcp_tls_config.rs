@@ -1,7 +1,7 @@
 use std::fmt::Display;
 
 #[derive(Debug, Clone, Eq, PartialEq)]
-pub struct TcpTlsConfig {
+pub struct ImsTcpTlsConfig {
     // The  client address for the TCP transport
     tcp_server_address: String,
     // Flag to enable TLS for the TCP transport
@@ -12,7 +12,7 @@ pub struct TcpTlsConfig {
     tcp_tls_ca_file: Option<String>,
 }
 
-impl TcpTlsConfig {
+impl ImsTcpTlsConfig {
     /// Creates a new `TcpTlsConfig` instance.
     ///
     /// # Arguments
@@ -26,7 +26,8 @@ impl TcpTlsConfig {
     ///
     /// A `TcpTlsConfig` instance.
     ///
-    pub fn new(
+    #[must_use]
+    pub const fn new(
         tcp_server_address: String,
         tcp_tls_enabled: bool,
         tcp_tls_domain: String,
@@ -41,25 +42,29 @@ impl TcpTlsConfig {
     }
 }
 
-impl TcpTlsConfig {
+impl ImsTcpTlsConfig {
+    #[must_use]
     pub fn tcp_server_address(&self) -> &str {
         &self.tcp_server_address
     }
 
-    pub fn tcp_tls_enabled(&self) -> bool {
+    #[must_use]
+    pub const fn tcp_tls_enabled(&self) -> bool {
         self.tcp_tls_enabled
     }
 
+    #[must_use]
     pub fn tcp_tls_domain(&self) -> &str {
         &self.tcp_tls_domain
     }
 
-    pub fn tcp_tls_ca_file(&self) -> &Option<String> {
+    #[must_use]
+    pub const fn tcp_tls_ca_file(&self) -> &Option<String> {
         &self.tcp_tls_ca_file
     }
 }
 
-impl Default for TcpTlsConfig {
+impl Default for ImsTcpTlsConfig {
     fn default() -> Self {
         Self {
             tcp_server_address: "127.0.0.1:8090".to_string(),
@@ -70,7 +75,7 @@ impl Default for TcpTlsConfig {
     }
 }
 
-impl Display for TcpTlsConfig {
+impl Display for ImsTcpTlsConfig {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         write!(
             f,

@@ -2,8 +2,6 @@ mod error;
 mod traits;
 pub mod utils;
 
-use common_message;
-use common_message::TcpTlsConfig;
 use iggy::users::defaults::{DEFAULT_ROOT_PASSWORD, DEFAULT_ROOT_USERNAME};
 use iggy::utils::duration::IggyDuration;
 use std::str::FromStr;
@@ -11,16 +9,6 @@ use std::str::FromStr;
 // Re export
 pub use error::*;
 pub use traits::*;
-
-pub fn get_ims_data_config() -> common_message::ImsDataConfig {
-    common_message::ImsDataConfig::new(
-        DEFAULT_ROOT_USERNAME.to_string(),
-        DEFAULT_ROOT_PASSWORD.to_string(),
-        "example-stream".to_string(),
-        "example-topic".to_string(),
-        "127.0.0.1:8090".to_string(),
-    )
-}
 
 #[derive(Debug)]
 pub struct Args {
@@ -71,16 +59,17 @@ pub struct Args {
 }
 
 impl Args {
-    pub fn new(
-        username: String,
-        password: String,
-        stream_id: String,
-        topic_id: String,
-        tcp_server_address: String,
-    ) -> Self {
+    #[must_use]
+    pub fn new(stream_id: String, topic_id: String) -> Self {
         Self {
-            username,
-            password,
+            stream_id,
+            topic_id,
+            ..Default::default()
+        }
+    }
+
+    pub fn with_server(stream_id: String, topic_id: String, tcp_server_address: String) -> Self {
+        Self {
             stream_id,
             topic_id,
             tcp_server_address,
@@ -88,29 +77,17 @@ impl Args {
         }
     }
 
-    pub fn from_ims_data_config(config: &common_message::ImsDataConfig) -> Self {
-        Self {
-            username: config.stream_user().to_string(),
-            password: config.stream_password().to_string(),
-            stream_id: config.stream_id().to_string(),
-            topic_id: config.topic_ids().to_string(),
-            tcp_server_address: config.tcp_server_address().to_string(),
-            ..Default::default()
-        }
-    }
-
-    pub fn from_ims_data_and_tls_config(
-        config: &common_message::ImsDataConfig,
-        tcp_tls_config: &TcpTlsConfig,
+    pub fn with_server_and_tls_config(
+        stream_id: String,
+        topic_id: String,
+        tcp_server_address: String,
+        tcp_tls_config: &common_message::ImsTcpTlsConfig,
     ) -> Self {
         Self {
-            // General config
-            username: config.stream_user().to_string(),
-            password: config.stream_password().to_string(),
-            stream_id: config.stream_id().to_string(),
-            topic_id: config.topic_ids().to_string(),
+            stream_id,
+            topic_id,
+            tcp_server_address,
             // Tls config
-            tcp_server_address: config.tcp_server_address().to_string(),
             tcp_tls_enabled: tcp_tls_config.tcp_tls_enabled(),
             tcp_tls_domain: tcp_tls_config.tcp_tls_domain().to_string(),
             tcp_tls_ca_file: tcp_tls_config.tcp_tls_ca_file().to_owned(),
@@ -139,7 +116,7 @@ impl Default for Args {
             offset: 0,
             auto_commit: false,
             transport: "tcp".to_string(),
-            encryption_key: "".to_string(),
+            encryption_key: String::new(),
             http_api_url: "http://localhost:3000".to_string(),
             http_retries: 3,
             tcp_reconnection_enabled: true,
@@ -173,6 +150,7 @@ impl Default for Args {
 }
 
 impl Args {
+    #[must_use]
     pub fn to_sdk_args(&self) -> iggy::args::Args {
         iggy::args::Args {
             transport: self.transport.clone(),
@@ -210,6 +188,7 @@ impl Args {
         }
     }
 
+    #[must_use]
     pub fn get_interval(&self) -> Option<IggyDuration> {
         match self.interval.to_lowercase().as_str() {
             "" | "0" | "none" => None,

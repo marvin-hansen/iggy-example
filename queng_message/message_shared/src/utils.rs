@@ -59,10 +59,12 @@ pub async fn create_stream_and_user(
     userpassword: &str,
     client: &IggyClient,
 ) -> Result<(), IggyError> {
+    // Create stream
     let stream = client
         .create_stream(stream_name, None)
         .await
         .expect("Failed to create stream");
+
     let mut streams_permissions = AHashMap::new();
 
     streams_permissions.insert(

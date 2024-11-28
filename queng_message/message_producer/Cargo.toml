@@ -6,8 +6,9 @@ rust-version.workspace = true
 readme.workspace = true
 repository.workspace = true
 authors.workspace = true
-license.workspace = true
 
+[lints]
+workspace = true
 [dependencies]
 # Internal crates
 common_message = {workspace = true}
@@ -15,7 +16,8 @@ message_shared = {workspace = true}
 
 # External crates
 ahash = {workspace = true}
-iggy = {workspace = true}
-tokio = {workspace = true}
 anyhow ={workspace = true}
 bytes = { workspace = true }
+iggy = {workspace = true}
+tokio = {workspace = true}
+log = "0.4.21"

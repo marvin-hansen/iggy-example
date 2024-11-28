@@ -5,6 +5,8 @@ resolver = "2"
 members = [
     "queng_common/*",
     "queng_message/*",
+    "queng_sbe/*",
+    "queng_services/template/*"
 ]
 
 
@@ -17,20 +19,23 @@ repository = "https://github.com/marvin-hansen/quant-engine"
 authors = ["Marvin Hansen <marvin.hansen@gmail.com>"]
 license = "MIT"
 
+
+# Linting with clippy
+[workspace.lints.clippy]
+all = "warn"
+
+
+# Linting
+[workspace.lints.rust]
+# Warnings
+deprecated-safe = "warn"
+deprecated_safe_2024 = "warn"
+
 # Optimize all crates
 [profile.release]
 opt-level = 3
 strip = true  # Automatically strip debug symbols from the binary
 lto = true    # Enable Link Time Optimization (LTO)
-codegen-units = 1 # Reduce Parallel Code Generation Units to Increase Optimization
-
-
-# There's a Cargo feature named profile-overrides
-# that lets you override the optimization level of dependencies.
-# https://docs.rust-embedded.org/book/unsorted/speed-vs-size.html
-[profile.release.package."*"]
-opt-level = 3
-strip = 'debuginfo'  # Automatically strip debug infos from the binary to reduce size
 codegen-units = 1 # Reduce Parallel Code Generation Units to Increase Optimization
 
 
@@ -41,12 +46,25 @@ codegen-units = 1 # Reduce Parallel Code Generation Units to Increase Optimizati
 # ==============
 #
 # Common
+common_config = { path = "queng_common/common_config" }
+common_errors = { path = "queng_common/common_errors" }
+common_ims = { path = "queng_common/common_ims" }
 common_message = { path = "queng_common/common_message" }
+common_service = { path = "queng_common/common_service" }
 
 # Mesasge bus
 message_consumer = { path = "queng_message/message_consumer" }
 message_producer = { path = "queng_message/message_producer" }
 message_shared = { path = "queng_message/message_shared" }
+
+# SBE
+sbe_bindings = { path = "queng_sbe/sbe_bindings" }
+sbe_messages = { path = "queng_sbe/sbe_messages" }
+sbe_utils = { path = "queng_sbe/sbe_utils" }
+
+# Services
+ims_data_service = { path = "queng_services/template/ims_data_service" }
+
 
 #
 # ==============
@@ -56,9 +74,11 @@ message_shared = { path = "queng_message/message_shared" }
 ahash = { version = "0.8.11", features = ["serde"] }
 anyhow = {version = "1.0.93"}
 bytes = {version = "1.8.0"}
+chrono = {version = "0.4"}
 futures-util = {version = "0.3.31"}
-iggy = {version = "0.6.40"}
+iggy = {version = "0.6"}
 rand = {version = "0.8.5"}
+rust_decimal = {version = "1.36"}
 serde = { version = "1.0.210", features = ["derive", "rc"] }
 serde_json = {version = "1.0.133"}
 trait-variant = {version = "0.1.2"}
