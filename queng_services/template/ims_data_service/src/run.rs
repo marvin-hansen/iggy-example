@@ -18,12 +18,7 @@ impl Server {
 
         tokio::select! {
                     // Wait for a signal that requests a graceful shutdown.
-
-                _ = signal_future => {
-                    self.shutdown()
-                        .await
-                        .expect("Failed to stop message service");
-                }
+                    _ = &mut signal_future => {break;}
 
             // Otherwise process messages.
             while let Some(message) = consumer.next().await {
