@@ -3,12 +3,10 @@ resolver = "2"
 
 
 members = [
-    "queng_common/common_message",
-    "queng_message/message_consumer",
-    "queng_message/message_producer",
-    "queng_message/message_shared",
-    "queng_message/message_tests",
+    "queng_common/*",
+    "queng_message/*",
 ]
+
 
 
 [workspace.package]

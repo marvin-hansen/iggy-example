@@ -103,11 +103,6 @@ common:remote-shared --extra_execution_platforms=//build/platforms:linux_x86_64_
 common:remote-shared --extra_execution_platforms=//build/platforms:linux-aarch64
 common:remote-shared --extra_execution_platforms=//build/platforms:linux-x86_64
 
-# Build with --config=remote to enable Remote Build Execution (RBE)
-common:remote --config=remote-shared
-common:remote --remote_cache=grpcs://remote.buildbuddy.io
-common:remote --remote_executor=remote.buildbuddy.io
-common:remote --remote_header=x-buildbuddy-api-key=4Ml6AhYICvGtZ3XhqafP
 
 ###############################################################################
 ## Custom user flags
