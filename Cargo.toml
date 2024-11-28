@@ -4,11 +4,13 @@ resolver = "2"
 
 members = [
     "queng_common/*",
+    "queng_integration_data/*",
     "queng_message/*",
-    "queng_sbe/*", "queng_services/data/sample_data_service",
-    "queng_services/template/*"
+    "queng_sbe/*",
+    "queng_services/data/*",
+    "queng_services/template/*",
+    "queng_traits/*"
 ]
-
 
 
 [workspace.package]
@@ -31,6 +33,7 @@ all = "warn"
 deprecated-safe = "warn"
 deprecated_safe_2024 = "warn"
 
+
 # Optimize all crates
 [profile.release]
 opt-level = 3
@@ -52,6 +55,10 @@ common_ims = { path = "queng_common/common_ims" }
 common_message = { path = "queng_common/common_message" }
 common_service = { path = "queng_common/common_service" }
 
+# Integrations
+data_integration_factory = { path = "queng_integration_data/data_integration_factory" }
+sample_data_integration = { path = "queng_integration_data/sample_data_integration" }
+
 # Mesasge bus
 message_consumer = { path = "queng_message/message_consumer" }
 message_producer = { path = "queng_message/message_producer" }
@@ -65,23 +72,26 @@ sbe_utils = { path = "queng_sbe/sbe_utils" }
 # Services
 ims_data_service = { path = "queng_services/template/ims_data_service" }
 
+# Traits
+data_integration_traits = { path = "queng_traits/data_integration_traits" }
 
 #
 # ==============
 # External crates
 # ==============
 #
-ahash = { version = "0.8.11", features = ["serde"] }
-anyhow = {version = "1.0.93"}
-bytes = {version = "1.8.0"}
+ahash = { version = "0.8", features = ["serde"] }
+anyhow = {version = "1.0"}
+bytes = {version = "1.8"}
 chrono = {version = "0.4"}
-futures-util = {version = "0.3.31"}
+enum_dispatch = {version = "0.3"}
+futures-util = {version = "0.3"}
 iggy = {version = "0.6"}
 rand = {version = "0.8.5"}
 rust_decimal = {version = "1.36"}
-serde = { version = "1.0.210", features = ["derive", "rc"] }
-serde_json = {version = "1.0.133"}
-trait-variant = {version = "0.1.2"}
-tokio = { version = "1.40.0", features = ["full"] }
-tracing = { version = "0.1.37" }
-tracing-subscriber = { version = "0.3.18", features = ["fmt", "env-filter"] }
+serde = { version = "1", features = ["derive", "rc"] }
+serde_json = {version = "1"}
+trait-variant = {version = "0.1"}
+tokio = { version = "1.40", features = ["full"] }
+tracing = { version = "0.1" }
+tracing-subscriber = { version = "0.3", features = ["fmt", "env-filter"] }

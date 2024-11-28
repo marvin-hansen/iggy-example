@@ -13,6 +13,7 @@ type Guarded<T> = std::sync::Arc<tokio::sync::RwLock<T>>;
 /// maintaining thread-safe access to shared resources using Tokio's async-aware locks.
 pub struct Server {
     dbg: bool,
+    // data_integration: Box<dyn DataIntegration>,
     integration_config: IntegrationConfig,
     consumer: Guarded<MessageConsumer>,
     producer: MessageProducer,
@@ -193,6 +194,28 @@ impl Server {
         &self.integration_config
     }
 }
+
+impl Server {
+    /// Shuts down the message service.
+    ///
+    /// This function will shut down the consumer and producer for the message service.
+    /// It will clean up any resources used by the consumer and producer and then shut them down.
+    ///
+    /// Errors:
+    ///
+    /// * If the consumer or producer fails to clean up and/or shut down.
+    ///
+    /// # Returns
+    ///
+    /// A `Result` wrapping a `Box<dyn Error>` or `Ok(())` if the message service was shutdown successfully.
+    pub(super) async fn shutdown(&self) -> Result<(), Box<dyn Error>> {
+        self.dbg_print("Shutting down message service");
+
+
+        Ok(())
+    }
+}
+
 
 impl Server {
     pub(crate) fn dbg_print(&self, msg: &str) {

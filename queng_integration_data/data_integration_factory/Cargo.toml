@@ -1,0 +1,21 @@
+[package]
+name = "data_integration_factory"
+version = "0.1.0"
+edition.workspace = true
+rust-version.workspace = true
+readme.workspace = true
+repository.workspace = true
+authors.workspace = true
+license.workspace = true
+
+
+[lints]
+workspace = true
+
+
+[dependencies]
+# Internal crates
+sample_data_integration = { workspace = true }
+
+# External crates
+enum_dispatch = { workspace = true }
