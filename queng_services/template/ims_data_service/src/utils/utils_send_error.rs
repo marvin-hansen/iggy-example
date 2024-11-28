@@ -1,6 +1,6 @@
 use common_errors::MessageProcessingError;
 use message_shared::SendMessage;
-use sbe_messages::{ClientErrorType};
+use sbe_messages::ClientErrorType;
 
 use crate::service::Server;
 

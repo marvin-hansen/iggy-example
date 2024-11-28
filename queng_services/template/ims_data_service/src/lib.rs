@@ -1,7 +1,7 @@
 use crate::service::Server;
 use common_ims::IntegrationConfig;
 use common_message::StreamUser;
-use common_service::print_utils;
+use common_service::{print_utils, shutdown_utils};
 use tokio::time::Instant;
 
 mod handle;
@@ -23,7 +23,6 @@ pub async fn start(
     let start = Instant::now();
     let stream_id = integration_config.control_channel();
 
-
     dbg_print("Configuring server");
     //Creates a new server
     let server = if dbg {
@@ -37,8 +36,8 @@ pub async fn start(
     };
 
     dbg_print("Run service");
-    // let signal = shutdown_utils::signal_handler("message server signal handler");
-    let service_handle = tokio::spawn(server.run());
+    let signal = shutdown_utils::signal_handler("message server signal handler");
+    let service_handle = tokio::spawn(server.run(signal));
 
     dbg_print("Set integration online");
     //

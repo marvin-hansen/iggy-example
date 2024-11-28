@@ -1,5 +1,5 @@
 mod getters;
-mod produce;
+mod send;
 mod shutdown;
 
 use ahash::AHashMap;
@@ -41,27 +41,67 @@ impl MessageProducer {
     ///
     /// A `Result` wrapping the `MessageProducer` instance or an `IggyError`.
     ///
+    /// Creates a new `MessageProducer` instance using the provided credentials and identifiers.
+    ///
+    /// # Arguments
+    ///
+    /// * `stream_id` - The identifier of the stream.
+    /// * `topic_id` - The identifier of the topic.
+    /// * `stream_user` - The `StreamUser` containing the username and password for stream authentication.
+    ///
+    /// # Returns
+    ///
+    /// A `Result` wrapping the `MessageProducer` instance or an `IggyError`.
+    ///
     pub async fn new(
         stream_id: String,
         topic_id: String,
         stream_user: &StreamUser,
     ) -> Result<Self, IggyError> {
         let args = Args::new(stream_id, topic_id);
-        Self::build(args, stream_user).await
+        Self::build(args, None, stream_user).await
     }
-    /// Creates a new `MessageProducer` instance using the default configuration.
+
+    /// Creates a new `MessageProducer` instance using the provided `IggyClient` and identifiers.
+    ///
+    /// # Arguments
+    ///
+    /// * `client` - The `IggyClient` to use for authentication and communication.
+    /// * `stream_id` - The identifier of the stream.
+    /// * `topic_id` - The identifier of the topic.
+    /// * `stream_user` - The `StreamUser` containing the username and password for stream authentication.
+    ///
+    /// # Returns
+    ///
+    /// A `Result` wrapping the `MessageProducer` instance or an `IggyError`.
+    ///
+    pub async fn with_client(
+        client: IggyClient,
+        stream_id: String,
+        topic_id: String,
+        stream_user: &StreamUser,
+    ) -> Result<Self, IggyError> {
+        let args = Args::new(stream_id, topic_id);
+        Self::build(args, Some(client), stream_user).await
+    }
+
+    /// Creates a default `MessageProducer` instance using the default `Args` and `StreamUser`.
     ///
     /// # Returns
     ///
     /// A `Result` wrapping the `MessageProducer` instance or an `IggyError`.
     ///
     pub async fn default() -> Result<Self, IggyError> {
-        Self::build(Args::default(), &StreamUser::default()).await
+        Self::build(Args::default(), None, &StreamUser::default()).await
     }
 }
 
 impl MessageProducer {
-    async fn build(args: Args, stream_user: &StreamUser) -> Result<Self, IggyError> {
+    async fn build(
+        args: Args,
+        client: Option<IggyClient>,
+        stream_user: &StreamUser,
+    ) -> Result<Self, IggyError> {
         // Create identifiers for stream, topic, and user.
         dbg!("Creating identifiers");
         let stream_id = Identifier::from_str_value(&args.stream_id).expect("Invalid stream id");
@@ -69,9 +109,15 @@ impl MessageProducer {
         let user_id = Identifier::from_str_value(&args.username).expect("Invalid user id");
 
         dbg!("Building client");
-        let client = shared_utils::build_client(args.to_sdk_args())
-            .await
-            .expect("Failed to create client");
+        let client = if client.is_some() {
+            // Unwrap client from option
+            client.unwrap()
+        } else {
+            // Build new client
+            shared_utils::build_client(args.to_sdk_args())
+                .await
+                .expect("Failed to create client")
+        };
 
         dbg!("Connecting client");
         client.connect().await.expect("Failed to connect");

@@ -2,11 +2,12 @@ use crate::service::Server;
 use common_errors::MessageProcessingError;
 use futures_util::StreamExt;
 use std::error::Error;
+use std::future::Future;
 
 impl Server {
     pub async fn run(
         self,
-        // _signal: impl Future<Output = ()> + Send + 'static,
+        signal: impl Future<Output = ()> + Send + 'static,
     ) -> Result<(), MessageProcessingError> {
         // // When call .await on a &mut _ reference, then pin the future. https://docs.rs/tokio/latest/tokio/macro.pin.html#examples
         // let signal_future = signal;
@@ -71,7 +72,6 @@ impl Server {
         if !client_producers.read().await.is_empty() {
             self.dbg_print("Cleaning up and shutting down client producers");
             for (client_id, producer) in client_producers.read().await.iter() {
-
                 self.dbg_print("Cleaning up and shutting down client producer");
                 self.dbg_print(&format!("Client ID: {}", client_id));
                 producer
