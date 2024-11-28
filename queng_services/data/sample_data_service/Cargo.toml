@@ -1,0 +1,28 @@
+[package]
+name = "sample_data_service"
+version = "0.1.0"
+edition.workspace = true
+rust-version.workspace = true
+readme.workspace = true
+repository.workspace = true
+authors.workspace = true
+license.workspace = true
+
+
+[lints]
+workspace = true
+
+
+[dependencies]
+# Internal crates
+common_config = {workspace = true}
+common_ims = {workspace = true}
+common_message = {workspace = true}
+ims_data_service = {workspace = true}
+
+# External crates
+chrono = { workspace = true }
+serde = {workspace = true}
+tokio = { workspace = true }
+
+

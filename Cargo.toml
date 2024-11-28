@@ -5,7 +5,7 @@ resolver = "2"
 members = [
     "queng_common/*",
     "queng_message/*",
-    "queng_sbe/*",
+    "queng_sbe/*", "queng_services/data/sample_data_service",
     "queng_services/template/*"
 ]
 

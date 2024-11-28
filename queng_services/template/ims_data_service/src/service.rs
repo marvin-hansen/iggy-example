@@ -180,10 +180,22 @@ impl Server {
     pub fn client_stream_user(&self) -> &StreamUser {
         &self.client_stream_user
     }
+
+    /// Returns a reference to the integration configuration.
+    ///
+    /// The integration configuration contains information about the server's
+    /// integration endpoints, channels, and version.
+    ///
+    /// # Returns
+    ///
+    /// A reference to the `IntegrationConfig` instance.
+    pub fn integration_config(&self) -> &IntegrationConfig {
+        &self.integration_config
+    }
 }
 
 impl Server {
-    fn dbg_print(&self, msg: &str) {
+    pub(crate) fn dbg_print(&self, msg: &str) {
         if self.dbg {
             println!("[IMSData/Server]: {msg}");
         }

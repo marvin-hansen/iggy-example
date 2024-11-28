@@ -26,16 +26,10 @@ pub fn print_start_header(
     println!();
 }
 
-pub fn print_start_header_message_service(
-    service_id: &ServiceID,
-    service_topic: &str,
-    metrics_addr: &str,
-    metrics_uri: &str,
-) {
-    println!("||  {service_id}  ||");
+pub fn print_start_header_message_service(service_name: &str, service_topic: &str) {
+    println!("||  {service_name}  ||");
     println!("==========================================");
     println!("Listening on topic: {service_topic}");
-    println!("Metrics on endpoint: {metrics_addr}/{metrics_uri}");
     println!("==========================================");
     println!();
 }

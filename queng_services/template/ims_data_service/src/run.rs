@@ -51,19 +51,35 @@ impl Server {
     ///
     /// A `Result` wrapping a `Box<dyn Error>` or `Ok(())` if the message service was shutdown successfully.
     pub(super) async fn shutdown(&self) -> Result<(), Box<dyn Error>> {
-        // Shutdown consumer
-        let consumer = self.consumer().read().await;
+        self.dbg_print("Shutting down message service");
 
+        self.dbg_print("Cleaning up and shutting down consumer");
+        let consumer = self.consumer().read().await;
         consumer
             .clean_up_and_shutdown()
             .await
             .expect("Failed to cleanup and shutdown consumer");
 
-        // Shutdown producer
+        self.dbg_print("Cleaning up and shutting down producer");
         self.producer()
             .clean_up_and_shutdown()
             .await
             .expect("Failed to cleanup and shutdown producer");
+
+        // check if there are any remaining client producers; if so, shut them down.
+        let client_producers = self.client_producers();
+        if !client_producers.read().await.is_empty() {
+            self.dbg_print("Cleaning up and shutting down client producers");
+            for (client_id, producer) in client_producers.read().await.iter() {
+
+                self.dbg_print("Cleaning up and shutting down client producer");
+                self.dbg_print(&format!("Client ID: {}", client_id));
+                producer
+                    .clean_up_and_shutdown()
+                    .await
+                    .expect("Failed to cleanup and shutdown client producer");
+            }
+        }
 
         Ok(())
     }

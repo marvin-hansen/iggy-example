@@ -1,4 +1,3 @@
-
 #[derive(Debug, Clone, Eq, PartialEq)]
 pub struct IntegrationMessageConfig {
     id: u16,
@@ -13,11 +12,7 @@ impl IntegrationMessageConfig {
     pub fn new(id: u16, version: u16) -> Self {
         let name = format!("{NAME}-{version}");
 
-        Self {
-            id,
-            name,
-            version,
-        }
+        Self { id, name, version }
     }
 }
 impl IntegrationMessageConfig {

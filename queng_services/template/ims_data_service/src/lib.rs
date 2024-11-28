@@ -12,7 +12,6 @@ mod utils;
 pub async fn start(
     dbg: bool,
     service_name: &str,
-    service_addr: &str,
     integration_config: IntegrationConfig,
     stream_user: StreamUser,
 ) -> Result<(), Box<dyn std::error::Error>> {
@@ -22,31 +21,31 @@ pub async fn start(
         }
     };
     let start = Instant::now();
+    let stream_id = integration_config.control_channel();
 
 
-    dbg_print("Configuring server and signal handler");
+    dbg_print("Configuring server");
     //Creates a new server
-    let server = if dbg{
+    let server = if dbg {
         Server::with_debug(integration_config, stream_user)
             .await
             .expect("Failed to build new service")
-
-     } else {
+    } else {
         Server::new(integration_config, stream_user)
             .await
             .expect("Failed to build new service")
     };
 
-    // let signal = shutdown_utils::signal_handler("gRPC server");
-
     dbg_print("Run service");
+    // let signal = shutdown_utils::signal_handler("message server signal handler");
     let service_handle = tokio::spawn(server.run());
 
     dbg_print("Set integration online");
+    //
 
     // Print service start header
     print_utils::print_duration("Starting service took:", &start.elapsed());
-    print_utils::print_start_header_simple(service_name, service_addr);
+    print_utils::print_start_header_message_service(service_name, &stream_id);
 
     //Start server.
     match tokio::try_join!(service_handle) {
@@ -57,6 +56,7 @@ pub async fn start(
     }
     //
     dbg_print("Set integration offline");
+    //
 
     Ok(())
 }
